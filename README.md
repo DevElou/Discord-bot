@@ -3,7 +3,6 @@
 Alain-Discord-Bot est un bot Discord développé en Python. Il permet d'automatiser certaines tâches sur un serveur Discord.
 
 ## Fonctionnalités
-- [Ajoute ici les fonctionnalités principales du bot]
 - Commandes personnalisées
 - Interaction avec des API
 - Gestion des utilisateurs
