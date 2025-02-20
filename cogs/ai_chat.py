@@ -20,6 +20,17 @@ class AIChat(commands.Cog):
         await ctx.send(f"```{language}\n{code_response}```")
         return code_response
     
+
+    @commands.hybrid_command()
+    async def trad(self, ctx, language, *, prompt):
+        await ctx.send("Translating...")
+        translation = ""
+        try:
+            translation = self.openai.translate(language, prompt)
+        except Exception as e:
+            translation = f"An error occurred: {e}"
+        await ctx.send(f"```{translation}```")
+        return translation
     
 
 async def setup(bot):

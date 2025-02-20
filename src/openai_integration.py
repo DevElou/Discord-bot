@@ -31,3 +31,9 @@ class OpenAIIntegration():
         return self.get_chatgpt_response(code_prompt)
     
 
+    def translate(self, language, prompt):
+        translation_prompt = f"Translate the following text into {language}: {prompt}"
+        return self.get_chatgpt_response(translation_prompt)
+
+    
+
