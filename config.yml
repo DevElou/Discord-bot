@@ -1,6 +1,6 @@
 bot:
   token : YOUR_BOT_TOKEN
-  prefix: "!a"
+  prefix: "$$"
   server_id: THE_SERVER_ID
   log_channel_id: THE_LOG_CHANNEL_ID
   general_channel: THE_GENERAL_CHANNEL_ID
@@ -9,7 +9,10 @@ bot:
   Player_in_voice : True
   Player_in_voice_channel_id: THE_VOICE_CHANNEL_ID
 
+smb:
+  host: THE_SMB_SERVER_ADDRESS
+  user: THE_SMB_USER
+  password: THE_SMB_PASSWORD
+
 openai:
   api_key: YOUR_API_KEY
-
-

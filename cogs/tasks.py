@@ -5,8 +5,13 @@ from discord.ext import commands,tasks
 class Tasks(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.print_online.start()
-        self.print_in_voice.start()
+        if bot.online_status:
+            self.print_online.start()
+            print(f"🚀 Task print_online is now running...")
+
+        if bot.player_in_voice:
+            self.print_in_voice.start()
+            print(f"🚀 Task print_in_voice is now running...")
 
     def cog_unload(self):
         self.print_online.cancel()

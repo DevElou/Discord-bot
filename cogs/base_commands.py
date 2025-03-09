@@ -1,5 +1,7 @@
 import discord
+import os
 from discord.ext import commands
+from src.sftp_connection import SFTPConnection
 
 import random
 import src.annexe_fct as af
@@ -8,6 +10,8 @@ import src.annexe_fct as af
 class BaseCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.sftp = SFTPConnection(bot.smb_host, bot.smb_user, bot.smb_password)
+        self.local_path = "./dl_files"
 
     @commands.hybrid_command()
     async def ping(self, ctx):
@@ -50,6 +54,41 @@ class BaseCommands(commands.Cog):
         await af.decompte(3, 0, ctx)
         await ctx.send(f"Bisous {random_player.mention} <3")
         await af.kick_voice( random_player)
+
+    @commands.command()
+    async def list_files(self, ctx):
+        files = self.sftp.list_files()
+
+        embed = discord.Embed(
+            title="📁 Liste des fichiers SFTP",
+            description="\n".join([f"📜 `{file}`" for file in files]),
+            color=discord.Color.blue()
+        )
+        embed.set_footer(text="🔄 Mise à jour en temps réel")
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def get_VPN(self, ctx):
+        
+        await ctx.send("📥 Téléchargement du fichier en cours...")
+        
+        # 🔹 Télécharger le fichier depuis le SFTP
+        if self.sftp.download_VPN():
+            await ctx.send("✅ Fichier téléchargé avec succès ! L'envoi est en cours...")
+
+            # 🔹 Envoyer le fichier sur Discord
+            try:
+                for file in os.listdir(self.local_path):
+                    with open(self.local_path + "/" + file, "rb") as file:
+                        if file.name.endswith(".ovpn"):
+                            await ctx.send("🔒 Fichier de configuration VPN détecté. Envoi en cours...")
+                            await ctx.send(file=discord.File(file))
+            except Exception as e:
+                await ctx.send(f"❌ Erreur lors de l'envoi du fichier : `{e}`")
+        else:
+            await ctx.send("❌ Échec du téléchargement du fichier.")
+
 
 async def setup(bot):
     await bot.add_cog(BaseCommands(bot))

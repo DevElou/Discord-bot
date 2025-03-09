@@ -31,6 +31,9 @@ class AlainBot(commands.Bot):
         self.player_in_voice = conf['bot']['Player_in_voice']
         self.player_in_voice_channel_id = conf['bot']['Player_in_voice_channel_id']
         self.general_channel = self.get_channel(self.general_channel_id)
+        self.smb_user = conf['smb']['user']
+        self.smb_password = conf['smb']['password']
+        self.smb_host = conf['smb']['host']
     
     
     async def setup_hooks(self):
@@ -59,6 +62,7 @@ class AlainBot(commands.Bot):
 
 
 if __name__ == '__main__':
+    
     bot = AlainBot()
     bot.run(conf['bot']['token'])
     
