@@ -11,7 +11,7 @@ class AIChat(commands.Cog):
         
     @commands.hybrid_command()
     async def code(self, ctx, language, *, prompt):
-        if (language == null or prompt == null):
+        if (language is None or prompt is None):
             await ctx.send("Please provide a language and a prompt.")
         print(f"{ctx.author} requested code in {language} for the following prompt: {prompt}")
         await ctx.send(f"Processing code in {language}...")
@@ -26,7 +26,7 @@ class AIChat(commands.Cog):
 
     @commands.hybrid_command()
     async def trad(self, ctx, language, *, prompt):
-        if (language == null or prompt == null):
+        if (language is None or prompt is None):
             await ctx.send("Please provide a language and a prompt.")
 
         print(f"{ctx.author} requested a translation from {language} for the following prompt: {prompt}")

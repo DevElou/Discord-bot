@@ -11,6 +11,7 @@ class BaseCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.sftp = SFTPConnection(bot.smb_host, bot.smb_user, bot.smb_password)
+        self.sftp.connect()
         self.local_path = "./dl_files"
 
     @commands.hybrid_command()
@@ -57,6 +58,10 @@ class BaseCommands(commands.Cog):
 
     @commands.command()
     async def list_files(self, ctx):
+        is_connected = self.sftp.verify_connection()
+        if not is_connected:
+            await ctx.send("❌ Connexion SFTP échouée. Vérifiez les informations de connexion.")
+            return
         files = self.sftp.list_files()
 
         embed = discord.Embed(
@@ -70,6 +75,11 @@ class BaseCommands(commands.Cog):
 
     @commands.command()
     async def get_VPN(self, ctx):
+
+        is_connected = self.sftp.verify_connection()
+        if not is_connected:
+            await ctx.send("❌ Connexion SFTP échouée. Vérifiez les informations de connexion.")
+            return
         
         await ctx.send("📥 Téléchargement du fichier en cours...")
         

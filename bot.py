@@ -59,8 +59,6 @@ class AlainBot(commands.Bot):
         role = discord.utils.get(member.guild.roles, name="camarade")
         await member.add_roles(role)
     
-
-
 if __name__ == '__main__':
     
     bot = AlainBot()

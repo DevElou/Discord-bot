@@ -13,9 +13,51 @@ class SFTPConnection:
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.client.connect(self.host, self.port, self.username, self.password)
+        self.sftp = None
+        self.connected = False
 
-        self.sftp = self.client.open_sftp()
+    def test_connection(self):
+        """
+        Vérifie si la connexion SFTP est active.
+        Retourne True si connecté, False sinon.
+        """
+        if self.connected and self.sftp:
+            try:
+                self.sftp.listdir(".")
+                self.connected = True
+                return True
+            except (paramiko.SSHException, IOError):
+                self.connected = False
+                return False
+        return False
+    
+    
+
+    def connect(self):
+        """
+        Établit une connexion SFTP si elle n'est pas déjà active.
+        """
+        if not self.test_connection():
+            try:
+                self.client.connect(self.host, self.port, self.username, self.password)
+                self.sftp = self.client.open_sftp()
+                self.connected = True
+            except Exception as e:
+                logging.error(f"Échec de la connexion SFTP : {e}")
+                self.connected = False
+
+    def verify_connection(self):
+        """
+        Vérifie si la connexion SFTP est active.
+        Si non, tente de se connecter.
+        Retourne True si connecté, False sinon.
+        """
+        if self.connected:
+            return True
+        else:
+            self.connect()
+            return self.connected
+
 
     def list_files(self):
         files = self.sftp.listdir(self.path)
